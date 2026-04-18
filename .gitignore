@@ -1,1 +1,19 @@
+# Secrets
+.env
 
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Data files (ignore CSVs but keep the folder)
+*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
