@@ -1,7 +1,7 @@
 # AI-Powered Retail Forecasting Engine
 LA Tech Rising | April 2026 | Mentor: Ritesh Verma
 
-A reusable retail forecasting engine that ingests historical sales data, forecasts future demand, flags unusual patterns, and generates plain-English summaries using the Claude API.
+A reusable retail forecasting engine that ingests historical sales data, forecasts future demand, flags unusual patterns, and generates plain-English summaries using the Gemini API.
 
 ## Team
 | Role | Name |
@@ -18,4 +18,4 @@ A reusable retail forecasting engine that ingests historical sales data, forecas
 - Streamlit
 - scikit-learn
 - pandas, NumPy
-- Claude API (Anthropic)
+- Gemini API
