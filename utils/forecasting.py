@@ -11,6 +11,7 @@ DEFAULT_GROUP_COLS = ["store", "item"]
 DEFAULT_TARGET_COL = "sales"
 DEFAULT_DATE_COL = "date"
 LIGHTGBM_METHOD = "lightgbm_global_lag"
+SIMPLE_FUTURE_METHOD = "simple_last_value_future"
 FEATURE_REGRESSION_METHOD = "feature_based_regression"
 FEATURE_REGRESSION_LAGS = [1, 3, 7]
 FEATURE_REGRESSION_ROLLING_WINDOWS = [3, 7, 28]
@@ -633,7 +634,7 @@ def _fit_lightgbm(
 
     model = LGBMRegressor(
         objective="regression",
-        n_estimators=350,
+        n_estimators=120,
         learning_rate=0.05,
         num_leaves=63,
         subsample=0.9,
@@ -813,6 +814,38 @@ def build_lightgbm_future_forecast(
         rolling_windows=window_values,
     )
     return _future_predictions_to_export(prediction_df, groups, date_col, LIGHTGBM_METHOD)
+
+
+def build_simple_future_forecast(
+    df: pd.DataFrame,
+    future_days: int,
+    group_cols: list[str] | None = None,
+    target_col: str = DEFAULT_TARGET_COL,
+    date_col: str = DEFAULT_DATE_COL,
+) -> pd.DataFrame:
+    """Andrew Garcia Leopold: build a fast fallback forecast for small uploaded datasets."""
+    if future_days <= 0:
+        raise ValueError("future_days must be positive.")
+
+    groups = group_cols or DEFAULT_GROUP_COLS
+    prepared = prepare_forecast_input(df, groups, target_col, date_col)
+    last_values = (
+        prepared.sort_values(date_col)
+        .groupby(groups, as_index=False)[target_col]
+        .last()
+        .rename(columns={target_col: "prediction"})
+    )
+
+    max_date = prepared[date_col].max()
+    predict_dates = pd.date_range(start=max_date + pd.Timedelta(days=1), periods=future_days, freq="D")
+    rows = []
+    for current_date in predict_dates:
+        day_predictions = last_values.copy()
+        day_predictions[date_col] = current_date
+        rows.append(day_predictions)
+
+    prediction_df = pd.concat(rows, ignore_index=True)
+    return _future_predictions_to_export(prediction_df, groups, date_col, SIMPLE_FUTURE_METHOD)
 
 
 # Category: Export helpers

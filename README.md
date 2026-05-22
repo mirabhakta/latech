@@ -1,4 +1,4 @@
-# AI-Powered Retail Forecasting Engine (in-progress)
+# inventoryIQ - AI-Powered Retail Forecasting Engine
 LA Tech Rising | Spring 2026 | Mentor: Ritesh Verma
 
 A reusable retail forecasting engine that ingests historical sales data, forecasts future demand, flags unusual patterns, and generates plain-English summaries using the Gemini API.
@@ -17,32 +17,102 @@ A reusable retail forecasting engine that ingests historical sales data, forecas
 
 
 ## Tech Stack
-- Python 3.9+
-- Streamlit 1.32.0
-- scikit-learn 1.4.1
-- pandas / NumPy
-- Gemini API (google-generativeai SDK)
+
+### Backend
+- Python
+- FastAPI
+- Uvicorn
+- pandas
+- NumPy
+- scikit-learn
+- LightGBM
+- Google Gen AI SDK
 - python-dotenv
+- openpyxl
 
-## Setup
+### Frontend
+- React 19
+- Vite
+- React Router DOM
+- Axios
+- Recharts
 
-1. Clone the repository
-   - git clone <repo-url>
+## Local Setup
 
-2. Create and activate a virtual environment
-   - python -m venv venv
-   - source venv/bin/activate  // # Windows: venv\Scripts\activate
+### 1. Clone the repository
+```bash
+git clone https://github.com/jybarra7/latech_InventoryIQ
+cd latech_InventoryIQ
+```
 
-4. Install dependencies
-   - pip install -r requirements.txt
+### 2. Set up the backend
+Use Python 3.11 or 3.12. Python 3.14 may fail with older pinned dependencies on Windows.
 
-5. Add your API key
-   Create a .env file in the project root:
-   - GEMINI_API_KEY=your_key_here
+```bash
+python -m venv venv
+```
 
-6. Run the app
-   - streamlit run app.py
+Activate the virtual environment:
 
+**Windows PowerShell**
+```powershell
+venv\Scripts\Activate
+```
+
+**macOS/Linux**
+```bash
+source venv/bin/activate
+```
+
+Install backend dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env` file in the project root:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+Run the backend:
+
+```bash
+uvicorn main:app --reload
+```
+
+The backend should start at:
+- `http://localhost:8000`
+- API docs: `http://localhost:8000/docs`
+
+### 3. Set up the frontend
+
+Open a second terminal and run:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend should start at:
+- `http://localhost:5173`
+
+## Running the App
+
+You need two terminals:
+
+1. **Backend**
+```bash
+uvicorn main:app --reload
+```
+
+2. **Frontend**
+```bash
+cd frontend
+npm run dev
+```
 
 ## Features
 - Upload any retail sales CSV and get an analysis-ready dashboard
